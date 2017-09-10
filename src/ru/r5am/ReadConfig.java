@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Created by Zoer (R5AM) on 10.09.2017.
+ */
 @Cfg
 public class ReadConfig {
 
