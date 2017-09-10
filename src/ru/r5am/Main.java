@@ -37,10 +37,10 @@ public class Main extends Application {
         primaryStage.getIcons().add(iconsImage);
 
         // Установка размеров главной формы
-        primaryStage.setMinWidth(125);
-        primaryStage.setMinHeight(125);
-        primaryStage.setMaxWidth(800);
-        primaryStage.setMaxHeight(600);
+        primaryStage.setMinWidth(640);
+        primaryStage.setMinHeight(480);
+        primaryStage.setMaxWidth(640);
+        primaryStage.setMaxHeight(480);
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
