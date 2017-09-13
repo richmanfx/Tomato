@@ -10,11 +10,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class Controller {
 
     @FXML
     private void initialize() throws InvocationTargetException, NoSuchMethodException,
-            InstantiationException, IOException, IllegalAccessException {
+            InstantiationException, IOException, IllegalAccessException, InterruptedException {
 
         // Считываем параметры из INI-файла
         readConfig();
@@ -26,7 +28,7 @@ public class Controller {
      * Считать параметры из INI-файла
      */
     private void readConfig() throws InvocationTargetException, NoSuchMethodException,
-            InstantiationException, IOException, IllegalAccessException {
+            InstantiationException, IOException, IllegalAccessException, InterruptedException {
 
         // Полный путь к конфиг-файлу
         File fullIniFilePath = new File(Main.userHomePath + File.separator + Main.iniFileName);
@@ -52,6 +54,8 @@ public class Controller {
         if (isWorkingDay())
             System.out.println("Сегодня рабочий день");
 
+        workingDayWaiting(isWorkingDay());
+
     }
 
 
@@ -66,4 +70,18 @@ public class Controller {
         return workDays.contains(weekDay);
     }
 
+
+    /**
+     * Ожидание наступления рабочего дня недели
+     */
+    private void workingDayWaiting(boolean workDay) throws InterruptedException {
+
+//        while (!workDay) {
+        while (workDay) {
+            workDay = isWorkingDay();
+            System.out.printf("День недели рабочий? - %s\n", workDay);
+            int period = 5; // минуты
+            sleep(period * 60 * 1000);  // Через период снова проверить
+        }
+    }
 }
