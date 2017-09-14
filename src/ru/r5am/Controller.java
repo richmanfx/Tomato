@@ -53,7 +53,7 @@ public class Controller {
 //
 //        workingDayWaiting(isWorkingDay());
 
-        getBeginTime(ReadConfig.beginTime);
+//        getBeginTime(ReadConfig.beginTime);
 
     }
 
@@ -129,7 +129,7 @@ public class Controller {
         System.out.println("Миллисекунд до Начального времени: " + diffMilliseconds);
 
         // Спать до начального времени (может чуть раньше и потом ловить кажду секунду?)
-        Thread.sleep(diffMilliseconds);
+//        Thread.sleep(diffMilliseconds);
         System.out.println("Время после просыпания: " + dateFormat.format(Calendar.getInstance(mskTz).getTime()));
 
 
