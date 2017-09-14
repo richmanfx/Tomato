@@ -5,10 +5,9 @@ import javafx.fxml.FXML;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -47,14 +46,14 @@ public class Controller {
         }
 //        System.out.printf("%s", ReadConfig.beginTime);
 
-        // Во время преобразовать
-        SimpleDateFormat beginDataTime = new SimpleDateFormat("yyyy.MM.dd EEEEEEEEEEE HH:mm");
-        System.out.println("Current Date: " + beginDataTime.format(new Date()));
 
-        if (isWorkingDay())
-            System.out.println("Сегодня рабочий день");
 
-        workingDayWaiting(isWorkingDay());
+//        if (isWorkingDay())
+//            System.out.println("Сегодня рабочий день");
+//
+//        workingDayWaiting(isWorkingDay());
+
+        getBeginTime(ReadConfig.beginTime);
 
     }
 
@@ -83,5 +82,56 @@ public class Controller {
             int period = 5; // минуты
             sleep(period * 60 * 1000);  // Через период снова проверить
         }
+    }
+
+    /**
+     * Определить оставшееся время до времени запуска
+     */
+    private void getRemainingTimeBeforeBegin() {
+
+    }
+
+    /**
+     * Преобразовать во время данные из конфига
+     */
+    private void getBeginTime(String beginTime) throws InterruptedException {
+
+        String beginHour = beginTime.substring(0,2);
+        String beginMinute = beginTime.substring(3,5);
+
+        TimeZone mskTz = TimeZone.getTimeZone("Europe/Moscow");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Calendar calendar = Calendar.getInstance(mskTz);
+        calendar.setLenient(false);     // Убрать "мягкий режим"
+
+        dateFormat.setCalendar(calendar);
+
+        calendar.setTimeZone(mskTz);
+
+        System.out.println("Текущее время: " + dateFormat.format(calendar.getTime()));
+        System.out.println("День недели: " + calendar.get(Calendar.DAY_OF_WEEK));
+        System.out.println("Временная зона: " + calendar.getTimeZone().getDisplayName());
+
+        Calendar calendarBegin = Calendar.getInstance(mskTz);
+        calendarBegin.setLenient(false);
+        calendarBegin.set(Calendar.HOUR_OF_DAY, Integer.parseInt(beginHour));
+        calendarBegin.set(Calendar.MINUTE, Integer.parseInt(beginMinute));
+        calendarBegin.set(Calendar.SECOND, 0);
+        calendarBegin.set(Calendar.MILLISECOND, 0);
+
+        // Если сегодня время начала уже прошло, до добавляем 1 день - на завра
+        if (calendar.getTime().after(calendarBegin.getTime()))
+            calendarBegin.add(Calendar.DAY_OF_YEAR, 1);
+
+        // Разница между начальным и текущим временем
+        long diffMilliseconds = calendarBegin.getTimeInMillis() - calendar.getTimeInMillis();
+        System.out.println("Миллисекунд до Начального времени: " + diffMilliseconds);
+
+        // Спать до начального времени (может чуть раньше и потом ловить кажду секунду?)
+        Thread.sleep(diffMilliseconds);
+        System.out.println("Время после просыпания: " + dateFormat.format(Calendar.getInstance(mskTz).getTime()));
+
+
     }
 }
