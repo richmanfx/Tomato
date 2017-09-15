@@ -1,0 +1,14 @@
+﻿# Конфигурационные параметры для Tomato
+
+beginTime = 10:00
+
+workDuration = 55
+
+timeoutDuration = 10
+
+lunchDuration = 61
+
+untilLunchCycles = 5
+
+afterLunchCycles = 5
+

@@ -33,27 +33,25 @@ public class Controller {
         File fullIniFilePath = new File(Main.userHomePath + File.separator + Main.iniFileName);
 
         // Если файл существует, то считать настройки. Если нет файла, то значения "по умолчанию"
-        if (fullIniFilePath.exists() && fullIniFilePath.isFile()) {
+        if (fullIniFilePath.exists() && fullIniFilePath.isFile())
             new ReadConfig();
-        } else {
-            ReadConfig.beginTime = "10:00";          // Время запуска Помидора
-            ReadConfig.workDuration = 45;            // Длительность работы
-            ReadConfig.timeoutDuration = 15;         // Длительность перерыва
-            ReadConfig.lunchDuration = 60;           // Длительность обеда
-            ReadConfig.untilLunchCycles = 4;         // Количество периодов работа/отдых до обеда
-            ReadConfig.afterLunchCycles = 4;         // Количество периодов работа/отдых после обеда
 
-        }
-//        System.out.printf("%s", ReadConfig.beginTime);
+        // Для отладки
+//        System.out.printf("%s\n", ReadConfig.beginTime);
+//        System.out.printf("%s\n", ReadConfig.workDuration);
+//        System.out.printf("%s\n", ReadConfig.timeoutDuration);
+//        System.out.printf("%s\n", ReadConfig.lunchDuration);
+//        System.out.printf("%s\n", ReadConfig.untilLunchCycles);
+//        System.out.printf("%s\n", ReadConfig.afterLunchCycles);
+//
+//
 
-
-
-//        if (isWorkingDay())
-//            System.out.println("Сегодня рабочий день");
+        if (isWorkingDay())
+            System.out.println("Сегодня рабочий день");
 //
 //        workingDayWaiting(isWorkingDay());
 
-//        getBeginTime(ReadConfig.beginTime);
+        getBeginTime(ReadConfig.beginTime);
 
     }
 
@@ -96,8 +94,8 @@ public class Controller {
      */
     private void getBeginTime(String beginTime) throws InterruptedException {
 
-        String beginHour = beginTime.substring(0,2);
-        String beginMinute = beginTime.substring(3,5);
+        String beginHour = beginTime.split(":")[0];
+        String beginMinute = beginTime.split(":")[1];
 
         TimeZone mskTz = TimeZone.getTimeZone("Europe/Moscow");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
