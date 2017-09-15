@@ -1,4 +1,4 @@
-package ru.r5am;
+package main.java.ru.r5am;
 
 import javafx.fxml.FXML;
 
@@ -9,9 +9,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static java.lang.Thread.sleep;
 
 public class Controller {
+
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     @FXML
     private void initialize() throws InvocationTargetException, NoSuchMethodException,
@@ -30,21 +35,22 @@ public class Controller {
             InstantiationException, IOException, IllegalAccessException, InterruptedException {
 
         // Полный путь к конфиг-файлу
-        File fullIniFilePath = new File(Main.userHomePath + File.separator + Main.iniFileName);
+        File fullIniFilePath = new File(ru.r5am.Main.userHomePath + File.separator + ru.r5am.Main.iniFileName);
 
         // Если файл существует, то считать настройки. Если нет файла, то значения "по умолчанию"
         if (fullIniFilePath.exists() && fullIniFilePath.isFile())
             new ReadConfig();
 
         // Для отладки
-//        System.out.printf("%s\n", ReadConfig.beginTime);
-//        System.out.printf("%s\n", ReadConfig.workDuration);
-//        System.out.printf("%s\n", ReadConfig.timeoutDuration);
-//        System.out.printf("%s\n", ReadConfig.lunchDuration);
-//        System.out.printf("%s\n", ReadConfig.untilLunchCycles);
-//        System.out.printf("%s\n", ReadConfig.afterLunchCycles);
-//
-//
+        log.info("%s\n", ReadConfig.beginTime);
+        log.info("%s\n", ReadConfig.beginTime);
+        log.info("%s\n", ReadConfig.workDuration);
+        log.info("%s\n", ReadConfig.timeoutDuration);
+        log.info("%s\n", ReadConfig.lunchDuration);
+        log.info("%s\n", ReadConfig.untilLunchCycles);
+        log.info("%s\n", ReadConfig.afterLunchCycles);
+
+
 
         if (isWorkingDay())
             System.out.println("Сегодня рабочий день");

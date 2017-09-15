@@ -1,4 +1,4 @@
-package ru.r5am;
+package main.java.ru.r5am;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
