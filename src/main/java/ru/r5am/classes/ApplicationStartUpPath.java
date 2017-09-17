@@ -1,4 +1,4 @@
-package ru.r5am;
+package ru.r5am.classes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -10,17 +10,17 @@ import java.nio.file.Paths;
  * Created by alien on 25.06.2015.
  */
 
-class ApplicationStartUpPath {
+public class ApplicationStartUpPath {
 
     /**
-     * @return Путь к каталогу, в котором расположен jar-файл с классом
-     *         ApplicationStartUpPath.
+     * @return Путь к каталогу, в котором расположен jar-файл
+     * с классом ApplicationStartUpPath.
      */
-    Path getApplicationStartUp() throws UnsupportedEncodingException,
+    public Path getApplicationStartUp() throws UnsupportedEncodingException,
             MalformedURLException {
         URL startupUrl = getClass().getProtectionDomain().getCodeSource()
                 .getLocation();
-        Path path = null;
+        Path path;
         try {
             path = Paths.get(startupUrl.toURI());
         } catch (Exception e) {

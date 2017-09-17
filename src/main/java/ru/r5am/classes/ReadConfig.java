@@ -1,17 +1,18 @@
-package ru.r5am;
+package ru.r5am.classes;
 
 import jfork.nproperty.Cfg;
 import jfork.nproperty.ConfigParser;
+import ru.r5am.Tomato;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 @Cfg
-class ReadConfig {
+public class ReadConfig {
 
     // Параметры в файле конфигурации с значениями по умолчанию
-    static String beginTime = "10:00";       // Время запуска Помидора
+    public static String beginTime = "10:00";       // Время запуска Помидора
     static int workDuration = 45;            // Длительность работы
     static int timeoutDuration = 15;         // Длительность перерыва
     static int lunchDuration = 60;           // Длительность обеда
@@ -19,9 +20,9 @@ class ReadConfig {
     static int afterLunchCycles = 4;         // Количество периодов работа/отдых после обеда
 
     // Конструктор
-    ReadConfig() throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+    public ReadConfig() throws NoSuchMethodException, InstantiationException, IllegalAccessException,
                         IOException, InvocationTargetException {
-        ConfigParser.parse(this, Main.userHomePath + File.separator + Main.iniFileName);
+        ConfigParser.parse(this, Tomato.userHomePath + File.separator + Tomato.iniFileName);
     }
 
 }

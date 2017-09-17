@@ -1,6 +1,8 @@
-package ru.r5am;
+package ru.r5am.controllers;
 
 import javafx.fxml.FXML;
+import ru.r5am.Tomato;
+import ru.r5am.classes.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.*;
 
 import static java.lang.Thread.sleep;
 
-public class Controller {
+public class MainController {
 
     @FXML
     private void initialize() throws InvocationTargetException, NoSuchMethodException,
@@ -30,7 +32,7 @@ public class Controller {
             InstantiationException, IOException, IllegalAccessException, InterruptedException {
 
         // Полный путь к конфиг-файлу
-        File fullIniFilePath = new File(Main.userHomePath + File.separator + Main.iniFileName);
+        File fullIniFilePath = new File(Tomato.userHomePath + File.separator + Tomato.iniFileName);
 
         // Если файл существует, то считать настройки. Если нет файла, то значения "по умолчанию"
         if (fullIniFilePath.exists() && fullIniFilePath.isFile())

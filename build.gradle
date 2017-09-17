@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'ru.r5am.Tomato'
+
+group = 'tomato'
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+//    compile '::'
+
+    // Local libraries
+    compile fileTree(dir: 'src/main/resources/lib', include: ['*.jar'])
+
+}
