@@ -13,11 +13,11 @@ public class ReadConfig {
 
     // Параметры в файле конфигурации с значениями по умолчанию
     public static String beginTime = "10:00";       // Время запуска Помидора
-    static int workDuration = 45;            // Длительность работы
-    static int timeoutDuration = 15;         // Длительность перерыва
-    static int lunchDuration = 60;           // Длительность обеда
-    static int untilLunchCycles = 4;         // Количество периодов работа/отдых до обеда
-    static int afterLunchCycles = 4;         // Количество периодов работа/отдых после обеда
+    public static int workDuration = 45;            // Длительность работы
+    public static int timeoutDuration = 15;         // Длительность перерыва
+    public static int lunchDuration = 60;           // Длительность обеда
+    public static int untilLunchCycles = 4;         // Количество периодов работа/отдых до обеда
+    public static int afterLunchCycles = 4;         // Количество периодов работа/отдых после обеда
 
     // Конструктор
     public ReadConfig() throws NoSuchMethodException, InstantiationException, IllegalAccessException,

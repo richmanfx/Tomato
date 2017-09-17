@@ -6,12 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.r5am.classes.*;
 
 /**
  * Created by Zoer (R5AM) on 09.09.2017.
  */
 public class Tomato extends Application {
+
+    public static final Logger rootLogger = LogManager.getRootLogger();
 
     public final static String userHomePath = System.getProperty("user.home");  // папка пользователя
     public final static String iniFileName = ".tomato/tomato.ini";              // файл конфигурации
@@ -26,7 +30,8 @@ public class Tomato extends Application {
         // Посмотрим путь, откуда мы стартуем - требуется класс /ru/r5am/ApplicationStartUpPath
         ApplicationStartUpPath startUpPath = new ApplicationStartUpPath();
         try {
-            System.out.println("startUpPath: " + startUpPath.getApplicationStartUp());
+            rootLogger.info("startUpPath: " + startUpPath.getApplicationStartUp());
+//            System.out.println("startUpPath: " + startUpPath.getApplicationStartUp());
         } catch (Exception e) {
             e.printStackTrace();
         }

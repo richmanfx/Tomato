@@ -39,14 +39,14 @@ public class MainController {
             new ReadConfig();
 
         // Для отладки
-//        System.out.printf("%s\n", ReadConfig.beginTime);
-//        System.out.printf("%s\n", ReadConfig.workDuration);
-//        System.out.printf("%s\n", ReadConfig.timeoutDuration);
-//        System.out.printf("%s\n", ReadConfig.lunchDuration);
-//        System.out.printf("%s\n", ReadConfig.untilLunchCycles);
-//        System.out.printf("%s\n", ReadConfig.afterLunchCycles);
-//
-//
+        Tomato.rootLogger.debug(String.format("beginTime = %s", ReadConfig.beginTime));
+        Tomato.rootLogger.debug(String.format("workDuration = %s", ReadConfig.workDuration));
+        Tomato.rootLogger.debug(String.format("timeoutDuration = %s", ReadConfig.timeoutDuration));
+        Tomato.rootLogger.debug(String.format("lunchDuration = %s", ReadConfig.lunchDuration));
+        Tomato.rootLogger.debug(String.format("untilLunchCycles = %s", ReadConfig.untilLunchCycles));
+        Tomato.rootLogger.debug(String.format("afterLunchCycles = %s", ReadConfig.afterLunchCycles));
+
+
 
         if (isWorkingDay())
             System.out.println("Сегодня рабочий день");
@@ -78,7 +78,7 @@ public class MainController {
 //        while (!workDay) {
         while (workDay) {
             workDay = isWorkingDay();
-            System.out.printf("День недели рабочий? - %s\n", workDay);
+            Tomato.rootLogger.info(String.format("День недели рабочий? - %s", workDay));
             int period = 5; // минуты
             sleep(period * 60 * 1000);  // Через период снова проверить
         }
@@ -109,9 +109,9 @@ public class MainController {
 
         calendar.setTimeZone(mskTz);
 
-        System.out.println("Текущее время: " + dateFormat.format(calendar.getTime()));
-        System.out.println("День недели: " + calendar.get(Calendar.DAY_OF_WEEK));
-        System.out.println("Временная зона: " + calendar.getTimeZone().getDisplayName());
+        Tomato.rootLogger.info("Текущее время: " + dateFormat.format(calendar.getTime()));
+        Tomato.rootLogger.info("День недели: " + calendar.get(Calendar.DAY_OF_WEEK));
+        Tomato.rootLogger.info("Временная зона: " + calendar.getTimeZone().getDisplayName());
 
         Calendar calendarBegin = Calendar.getInstance(mskTz);
         calendarBegin.setLenient(false);
