@@ -29,13 +29,7 @@ public class Tomato extends Application {
 
         // Посмотрим путь, откуда мы стартуем - требуется класс /ru/r5am/ApplicationStartUpPath
         ApplicationStartUpPath startUpPath = new ApplicationStartUpPath();
-        try {
-            rootLogger.info("startUpPath: " + startUpPath.getApplicationStartUp());
-//            System.out.println("startUpPath: " + startUpPath.getApplicationStartUp());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+            rootLogger.debug("startUpPath: " + startUpPath.getApplicationStartUp());
 
         // Иконка приложения
         String imageUrl = getClass().getResource(programIcon).toString();
