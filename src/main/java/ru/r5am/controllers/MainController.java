@@ -12,7 +12,6 @@ import ru.r5am.classes.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -50,6 +49,9 @@ public class MainController {
         Tomato.rootLogger.debug(String.format("untilLunchCycles = %s", ReadConfig.untilLunchCycles));
         Tomato.rootLogger.debug(String.format("afterLunchCycles = %s", ReadConfig.afterLunchCycles));
 
+        TimeZone mskTz = TimeZone.getTimeZone("Europe/Moscow");
+        TimeZone.setDefault(mskTz);  // Московская зона всем по дефолту
+
     }
 
 
@@ -60,8 +62,11 @@ public class MainController {
     private boolean isWorkingDay(){
         SimpleDateFormat dataTime = new SimpleDateFormat("E");
         String weekDay = dataTime.format(new Date());
-        List<String> workDays = Arrays.asList("Пн", "Вт", "Ср", "Чт", "Пт");
-        return workDays.contains(weekDay);
+        List<String> workDays = Arrays.asList("Пн", "Вт", "Ср", "Чт", "Пт", "Mon", "Tue", "Wed", "Thu", "Fri");
+        boolean isWorkDay = workDays.contains(weekDay);
+        if (!isWorkDay)
+            Tomato.rootLogger.info("Not worked day: " + weekDay);
+        return isWorkDay;
     }
 
 
@@ -89,43 +94,47 @@ public class MainController {
     /**
      * Преобразовать во время данные из конфига
      */
-    private void getBeginTime(String beginTime) throws InterruptedException {
+    private Date getBeginTime(String beginTime) throws InterruptedException {
 
         String beginHour = beginTime.split(":")[0];
         String beginMinute = beginTime.split(":")[1];
 
-        TimeZone mskTz = TimeZone.getTimeZone("Europe/Moscow");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Calendar calendar = Calendar.getInstance(mskTz);
-        calendar.setLenient(false);     // Убрать "мягкий режим"
-
-        dateFormat.setCalendar(calendar);
-
-        calendar.setTimeZone(mskTz);
-
-        Tomato.rootLogger.info(String.format("Current time - Текущее время: %s", dateFormat.format(calendar.getTime())));
-        Tomato.rootLogger.info("Day of weak: " + calendar.get(Calendar.DAY_OF_WEEK));
-        Tomato.rootLogger.info("Time zone: " + calendar.getTimeZone().getDisplayName());
-
-        Calendar calendarBegin = Calendar.getInstance(mskTz);
+        Calendar calendarBegin = Calendar.getInstance();
         calendarBegin.setLenient(false);
         calendarBegin.set(Calendar.HOUR_OF_DAY, Integer.parseInt(beginHour));
         calendarBegin.set(Calendar.MINUTE, Integer.parseInt(beginMinute));
         calendarBegin.set(Calendar.SECOND, 0);
         calendarBegin.set(Calendar.MILLISECOND, 0);
 
-        // Если сегодня время начала уже прошло, до добавляем 1 день - на завра
-        if (calendar.getTime().after(calendarBegin.getTime()))
-            calendarBegin.add(Calendar.DAY_OF_YEAR, 1);
+        return calendarBegin.getTime();
 
-        // Разница между начальным и текущим временем
-        long diffMilliseconds = calendarBegin.getTimeInMillis() - calendar.getTimeInMillis();
-        Tomato.rootLogger.info("Millisecond before 'Start': " + diffMilliseconds);
+//        TimeZone mskTz = TimeZone.getTimeZone("Europe/Moscow");
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        // Спать до начального времени (может чуть раньше и потом ловить кажду секунду?)
-//        Thread.sleep(diffMilliseconds);
-        Tomato.rootLogger.info("Time after sleeping: " + dateFormat.format(Calendar.getInstance(mskTz).getTime()));
+//        Calendar calendar = Calendar.getInstance(timeZone);
+//        calendar.setLenient(false);     // Убрать "мягкий режим"
+
+//        dateFormat.setCalendar(calendar);
+
+//        calendar.setTimeZone(mskTz);
+
+//        Tomato.rootLogger.info(String.format("Current time - Текущее время: %s", dateFormat.format(calendar.getTime())));
+//        Tomato.rootLogger.info("Day of weak: " + calendar.get(Calendar.DAY_OF_WEEK));
+//        Tomato.rootLogger.info("Time zone: " + calendar.getTimeZone().getDisplayName());
+
+
+
+//        // Если сегодня время начала уже прошло, до добавляем 1 день - на завра
+//        if (calendar.getTime().after(calendarBegin.getTime()))
+//            calendarBegin.add(Calendar.DAY_OF_YEAR, 1);
+//
+//        // Разница между начальным и текущим временем
+//        long diffMilliseconds = calendarBegin.getTimeInMillis() - calendar.getTimeInMillis();
+//        Tomato.rootLogger.info("Millisecond before 'Start': " + diffMilliseconds);
+//
+//        // Спать до начального времени (может чуть раньше и потом ловить кажду секунду?)
+////        Thread.sleep(diffMilliseconds);
+//        Tomato.rootLogger.info("Time after sleeping: " + dateFormat.format(Calendar.getInstance(mskTz).getTime()));
     }
 
 
@@ -152,24 +161,29 @@ public class MainController {
         switch (clickedButton.getId()) {
 
             case "buttonStartStop":
-                startingCycle(actionEvent);
+                if (Objects.equals(clickedButton.getText(), "Start"))
+                    startingCycle(actionEvent, clickedButton);
+                else
+                    stoppingCycle(actionEvent, clickedButton);
                 break;
 
-//          case "buttonHelp":
+            case "buttonHelp":
+                Tomato.rootLogger.info("Pushed 'Help'");
 //              // Запускаем OHJ
 //              try {
 //                  MyHelp.showHelp();
 //              } catch (Exception e) {
 //                  e.printStackTrace();
 //              }
-//              break;
+                break;
 //
-//            case "buttonSettings":
+            case "buttonSettings":
+                Tomato.rootLogger.info("Pushed 'Settings'");
 //                // Редактирование настроек
 //                actionSettingsEdit(actionEvent);
 ////                 Обновление Main формы
 ////                initialize();
-//                break;
+                break;
 
             case "buttonExit":
 //                MyHelp.disposeHelp();
@@ -180,26 +194,93 @@ public class MainController {
     }
 
     /**
-     * Запуск цикла рабочего дня
-     * @param actionEvent
+     * Остановка цикла рабочего дня
+     * @param actionEvent Событие с кнопкой
+     * @param stopButton Кнопка
      */
-    private void startingCycle(ActionEvent actionEvent) throws InterruptedException {
-        if (isWorkingDay())
-            System.out.println("Сегодня рабочий день");
-//
-//        workingDayWaiting(isWorkingDay());
+    private void stoppingCycle(ActionEvent actionEvent, Button stopButton) {
+        stopButton.setStyle("-fx-text-fill: yellow;");
+        stopButton.setText("Start");
+        Tomato.rootLogger.debug("Pushed 'Stop'");
+    }
 
-        getBeginTime(ReadConfig.beginTime);
+    /**
+     * Запуск цикла рабочего дня
+     * @param actionEvent Событие с кнопкой
+     * @param startButton Кнопка
+     */
+    private void startingCycle(ActionEvent actionEvent, Button startButton) throws InterruptedException {
+
+        // изменить вид кнопки 'Start'
+        startButton.setStyle("-fx-text-fill: red;");
+        startButton.setText("Stop");
+        Tomato.rootLogger.debug("Pushed 'Start'");
+
+        // Определить рабочее ли время
+        boolean isWorkTime = isWorkingTime();
 
     }
 
     /**
+     * Определить рабочее ли время в текущий момент
+     * @return true - время рабочее
+     */
+    private boolean isWorkingTime() throws InterruptedException {
+        boolean isWorkTime = true;
+
+        // Если рабочий день, то проверяем рабочее ли время
+        if (isWorkingDay()) {
+            Tomato.rootLogger.info("Today's a work day");
+
+            if (!isCurrentTimeInWorkingDayPeriod()) {
+                Tomato.rootLogger.info("Now nonworking time");
+                isWorkTime = false;
+            } else {
+                Tomato.rootLogger.info("Now working time");
+            }
+        } else {
+            isWorkTime = false;
+        }
+        return isWorkTime;
+    }
+
+
+    /**
+     * Определить попадает ли текущее время в рабочий период дня
+     * @return true - текущее время попадает в рабочий период дня
+     */
+    private boolean isCurrentTimeInWorkingDayPeriod() throws InterruptedException {
+        boolean time = false;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setLenient(false);     // Убрать "мягкий режим"
+
+        // Время начала рабочего периода дня
+        long beginTimeOfDayInMs = getBeginTime(ReadConfig.beginTime).getTime();
+
+        // Текущее время
+        long currentTimeInMs = calendar.getTimeInMillis();
+        Tomato.rootLogger.info("Current time: " + new Date(currentTimeInMs));
+
+        // Время конца рабочего дня в миллисекундах
+        long endTimeOfDayImMs = currentTimeInMs +
+                ReadConfig.untilLunchCycles * (ReadConfig.workDuration + ReadConfig.timeoutDuration) * 3600 +
+                ReadConfig.lunchDuration * 3600 + ReadConfig.afterLunchCycles * (ReadConfig.workDuration + ReadConfig.timeoutDuration) * 3600;
+
+        // Если попадает
+        if ((currentTimeInMs >= beginTimeOfDayInMs) && (currentTimeInMs < endTimeOfDayImMs)) {
+            time = true;
+        }
+
+        return time;
+    }
+
+    /**
      * Закрыть текущее окно
-     * @param actionEvent
+     * @param actionEvent Событие кнопки
      */
     private void actionWindowClose(ActionEvent actionEvent) {
-
-        Tomato.rootLogger.info("Worked method 'actionWindowClose'");
+        Tomato.rootLogger.debug("Worked method 'actionWindowClose'");
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();

@@ -25,7 +25,7 @@ public class Tomato extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/ru.r5am.fxml"));
 
-        primaryStage.setTitle("Помидор");   // Заголовок окна
+        primaryStage.setTitle("Tomato");   // Заголовок окна
 
         // Посмотрим путь, откуда мы стартуем - требуется класс /ru/r5am/ApplicationStartUpPath
         ApplicationStartUpPath startUpPath = new ApplicationStartUpPath();
