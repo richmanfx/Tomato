@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="480.0" maxWidth="640.0" minHeight="480.0" minWidth="640.0" prefHeight="480.0" prefWidth="640.0" styleClass="background" stylesheets="@tomato.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.r5am.Controller">
+<HBox maxHeight="480.0" maxWidth="640.0" minHeight="480.0" minWidth="640.0" prefHeight="480.0" prefWidth="640.0" styleClass="background" stylesheets="@/css/tomato.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.r5am.controllers.MainController">
    <children>
       <AnchorPane prefHeight="442.0" prefWidth="640.0">
          <children>
@@ -17,7 +17,7 @@
                <children>
                   <AnchorPane prefHeight="450.0" prefWidth="500.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" styleClass="big_button" stylesheets="@tomato.css" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+                        <Button alignment="CENTER" mnemonicParsing="false" styleClass="big_button" stylesheets="@/css/tomato.css" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
                            <font>
                               <Font size="40.0" />
                            </font>
@@ -31,12 +31,17 @@
                <children>
                   <AnchorPane prefHeight="480.0" prefWidth="140.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" stylesheets="@tomato.css" text="Help" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+                        <Button fx:id="buttonHelp" onAction="#buttonProcessing" alignment="CENTER" mnemonicParsing="false" stylesheets="@/css/tomato.css" text="Help" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Button>
-                        <Button alignment="CENTER" layoutY="32.0" mnemonicParsing="false" stylesheets="@tomato.css" text="Settings" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+                        <Button fx:id="buttonSettings" onAction="#buttonProcessing" alignment="CENTER" layoutY="32.0" mnemonicParsing="false" stylesheets="@/css/tomato.css" text="Settings" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="buttonExit" onAction="#buttonProcessing" alignment="CENTER" cancelButton="true" mnemonicParsing="false" stylesheets="@/css/tomato.css" text="Exit" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
                            <font>
                               <Font size="16.0" />
                            </font>

@@ -1,82 +1,24 @@
-/******************************************************************/
-//
-//      For create *-all.jar type "gradlew.bat ShadowJar"
-//
-//
-/******************************************************************/
-apply plugin:'java'
+apply plugin: 'java'
 apply plugin: 'application'
-//apply plugin: 'com.github.johnrengelman.shadow'
 
-mainClassName = 'ru.r5am.Main'
-[ compileJava, compileTestJava ]*.options*.encoding = 'UTF-8'
-//jarDependenciesLib = 'help'
+mainClassName = 'ru.r5am.Tomato'
+compileTestJava.options.encoding = 'UTF-8'
 
-
-//buildscript {
-//    repositories { jcenter() }
-//    dependencies {
-//    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.1'
-//  }
-//}
+group = 'tomato'
 
 
 repositories {
     mavenLocal()
-    mavenCentral()	// Центральный репозиторий Maven
+    mavenCentral()
     jcenter()
 }
 
-//task wrapper(type: Wrapper) {
-//    			     gradleVersion = '2.4'
-//}
-
-
-//sourceSets {
-//    sourceSet.output.resourcesDir = 'build/libs/'
-//}
-
-jar {
-     baseName = 'Tomato'
-     version =  '1.0'
-     manifest {
-       	       attributes("Generated-By": "Gradle",
-         	      "Main-Class": mainClassName,
-		          "Built-By": "Александр Ящук (Aleksandr Jashhuk), R5AM",
-		          "Class-Path": "library/help-share.jar library/jewt.jar library/ohj.jar library/oracle_ice.jar library/share.jar library/jssc-2.8.0.jar library/nproperty-1.4.jar"
-			 )
-     }
-}
-
-//
-//task copyFiles(type: Copy) {
-//                                // Откуда
-//				from 'src/main/resources/'
-//
-//				// Куда
-//				into 'build/libs'
-//
-//				// Что
-//				exclude 'fxml/', 'css/', 'data/', 'help/', 'images/'
-//				include '**/*.jar'
-//				// include '**/*.fxml', '**/*.css', '**/*.dat', '**/*.xml'
-//                                // include '**/*.hs', '**/*.map', '**/*.jar', '**/*.html'
-//                                // include '**/*.png', '**/*.jpg'
-//
-//}
-//
-//
-//jar.dependsOn(copyFiles)
-//
-
-
 dependencies {
-//  		compile "junit:junit:3.8.2"
-	compile 'org.codehaus.groovy:groovy-all:2.1.5'
-    compile 'org.slf4j:slf4j-log4j12:1.7.25'
 
+    compile 'org.apache.logging.log4j:log4j-api:2.9.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.9.0'
 
-	// Local libraries
-    compile fileTree(dir: 'src/main/resources/library', include: ['*.jar'])
+    // Local libraries
+    compile fileTree(dir: 'src/main/resources/lib', include: ['*.jar'])
+
 }
-

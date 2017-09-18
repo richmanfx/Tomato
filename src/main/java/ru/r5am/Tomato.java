@@ -6,32 +6,32 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.r5am.classes.*;
 
 /**
  * Created by Zoer (R5AM) on 09.09.2017.
  */
-public class Main extends Application {
+public class Tomato extends Application {
 
-    final static String userHomePath = System.getProperty("user.home");  // папка пользователя
-    final static String iniFileName = ".tomato/tomato.ini";              // файл конфигурации
-    private final static String programIcon = "tomato.png";              // Иконка приложения
+    public static final Logger rootLogger = LogManager.getRootLogger();
+
+    public final static String userHomePath = System.getProperty("user.home");  // папка пользователя
+    public final static String iniFileName = ".tomato/tomato.ini";              // файл конфигурации
+    private final static String programIcon = "/images/tomato.png";             // иконка приложения
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("ru.r5am.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/ru.r5am.fxml"));
 
         primaryStage.setTitle("Помидор");   // Заголовок окна
 
         // Посмотрим путь, откуда мы стартуем - требуется класс /ru/r5am/ApplicationStartUpPath
-//        ApplicationStartUpPath startUpPath = new ApplicationStartUpPath();
-//        try {
-//            System.out.println("startUpPath: " + startUpPath.getApplicationStartUp());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        ApplicationStartUpPath startUpPath = new ApplicationStartUpPath();
+            rootLogger.debug("startUpPath: " + startUpPath.getApplicationStartUp());
 
-
-        // Иконка приложения
+        // иконка приложения
         String imageUrl = getClass().getResource(programIcon).toString();
         Image iconsImage = new Image(imageUrl);
         primaryStage.getIcons().add(iconsImage);
@@ -44,7 +44,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        scene.getStylesheets().add(getClass().getResource("tomato.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/tomato.css").toExternalForm());
         primaryStage.show();
     }
 
