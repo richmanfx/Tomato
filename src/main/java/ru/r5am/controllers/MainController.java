@@ -21,12 +21,11 @@ import static java.lang.Thread.sleep;
 public class MainController {
 
     @FXML
-    private void initialize() throws InvocationTargetException, NoSuchMethodException,
-            InstantiationException, IOException, IllegalAccessException, InterruptedException {
+    private void initialize() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IOException,
+            IllegalAccessException, InterruptedException {
 
         // Считываем параметры из INI-файла
         readConfig();
-
 
     }
 
@@ -50,15 +49,6 @@ public class MainController {
         Tomato.rootLogger.debug(String.format("lunchDuration = %s", ReadConfig.lunchDuration));
         Tomato.rootLogger.debug(String.format("untilLunchCycles = %s", ReadConfig.untilLunchCycles));
         Tomato.rootLogger.debug(String.format("afterLunchCycles = %s", ReadConfig.afterLunchCycles));
-
-
-
-        if (isWorkingDay())
-            System.out.println("Сегодня рабочий день");
-//
-//        workingDayWaiting(isWorkingDay());
-
-        getBeginTime(ReadConfig.beginTime);
 
     }
 
@@ -140,6 +130,7 @@ public class MainController {
 
 
     // Привязка переменных к компонентам в main.fxml
+    @FXML private Button buttonStartStop;
     @FXML private Button buttonHelp;
     @FXML private Button buttonSettings;
     @FXML private Button buttonExit;
@@ -147,32 +138,31 @@ public class MainController {
     /**
      *  Обработка нажатий мышкой на Buttons (клавиатура отдельно обрабатывается!)
      */
-    public void buttonProcessing(ActionEvent actionEvent) throws InvocationTargetException,
-            NoSuchMethodException,
-            InstantiationException,
-            IOException,
-            IllegalAccessException, HelpSetParseException {
+    public void buttonProcessing(ActionEvent actionEvent) throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+            IOException, IllegalAccessException, HelpSetParseException, InterruptedException {
 
         Object source = actionEvent.getSource();
 
         // Если источник события не кнопка, то ничего не делать и выйти
-        if (!(source instanceof Button)) {
-            return;
-        }
+        if (!(source instanceof Button)) return;
 
         // Нисходящее приведение
         Button clickedButton = (Button) source;
 
         switch (clickedButton.getId()) {
 
-//            case "buttonHelp":
-//                // Запускаем OHJ
-//                try {
-//                    MyHelp.showHelp();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                break;
+            case "buttonStartStop":
+                startingCycle(actionEvent);
+                break;
+
+//          case "buttonHelp":
+//              // Запускаем OHJ
+//              try {
+//                  MyHelp.showHelp();
+//              } catch (Exception e) {
+//                  e.printStackTrace();
+//              }
+//              break;
 //
 //            case "buttonSettings":
 //                // Редактирование настроек
@@ -187,6 +177,20 @@ public class MainController {
                 actionWindowClose(actionEvent);
                 break;
         }
+    }
+
+    /**
+     * Запуск цикла рабочего дня
+     * @param actionEvent
+     */
+    private void startingCycle(ActionEvent actionEvent) throws InterruptedException {
+        if (isWorkingDay())
+            System.out.println("Сегодня рабочий день");
+//
+//        workingDayWaiting(isWorkingDay());
+
+        getBeginTime(ReadConfig.beginTime);
+
     }
 
     /**

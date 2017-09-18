@@ -17,7 +17,7 @@
                <children>
                   <AnchorPane prefHeight="450.0" prefWidth="500.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" styleClass="big_button" stylesheets="@/css/tomato.css" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+                        <Button fx:id="buttonStartStop" onAction="#buttonProcessing" alignment="CENTER" mnemonicParsing="false" styleClass="big_button" stylesheets="@/css/tomato.css" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
                            <font>
                               <Font size="40.0" />
                            </font>
