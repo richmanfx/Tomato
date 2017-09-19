@@ -19,12 +19,18 @@ import static java.lang.Thread.sleep;
 
 public class MainController {
 
+    ArrayList<Event> dayEvents = new ArrayList<>();     // Коллекция объектов Event за весь день
+
     @FXML
     private void initialize() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IOException,
             IllegalAccessException, InterruptedException {
 
         // Считываем параметры из INI-файла
         readConfig();
+
+        // Коллекцию объектов Event сделать
+        dayEvents = makeDayEvents();
+        Tomato.rootLogger.info("dayEvents ready");
 
     }
 
@@ -219,6 +225,112 @@ public class MainController {
         // Определить рабочее ли время
         boolean isWorkTime = isWorkingTime();
 
+        if (isWorkTime) {
+            // Запустить дневной цикл и перейти до текущего времени в нём
+            // Сравнивать текущее время со стартовыми временами Event-ов из коллекции - если прошло, то следующий Event
+            for (Event event : dayEvents) {
+
+                if (new Date().getTime() < event.getBeginTime().getTime()) {
+
+                    // Работать или отдыхать - в предыдущем периоде, до события?
+                    if(!event.isWorkFlag()) {
+                        Tomato.rootLogger.info("All - work! Until: " + event.getBeginTime());
+                    } else {
+                        Tomato.rootLogger.info("Relax... Until: " + event.getBeginTime());
+                    }
+                    break;
+                    // Ждать начала следующего события
+
+
+
+                }
+
+            }
+
+        } else {
+            // Спать до стартового времени дневного цикла
+
+            // Запустить дневной цикл
+        }
+
+    }
+
+    /**
+     * Создать список событий дня
+     * @return Список событий
+     */
+    private ArrayList<Event> makeDayEvents() throws InterruptedException {
+        ArrayList<Event> dayEvents = new ArrayList<>();
+        int toMsMultiplier = 60000;
+
+        // События до обеда
+        for (int untilEventCount = 0; untilEventCount < ReadConfig.untilLunchCycles; untilEventCount++) {
+
+            // Рабочее событие
+            Event workEvent = new Event(
+                    new Date(
+                        getBeginTime(ReadConfig.beginTime).getTime() +
+                        untilEventCount * (ReadConfig.workDuration + ReadConfig.timeoutDuration) * toMsMultiplier
+                    ),
+                    ReadConfig.workDuration,
+                    true
+            );
+            dayEvents.add(workEvent);
+
+            // Событие отдыха
+            Event timeoutEvent = new Event(
+                    new Date(
+                        getBeginTime(ReadConfig.beginTime).getTime() +
+                        ReadConfig.workDuration * (untilEventCount + 1) * toMsMultiplier +
+                        ReadConfig.timeoutDuration * untilEventCount * toMsMultiplier
+                    ),
+                    ReadConfig.timeoutDuration,
+                    false
+            );
+            dayEvents.add(timeoutEvent);
+        }
+
+        // Обед
+        Event lunchEvent = new Event(
+                new Date(
+                    getBeginTime(ReadConfig.beginTime).getTime() +
+                    ReadConfig.untilLunchCycles * ((ReadConfig.workDuration + ReadConfig.timeoutDuration) * toMsMultiplier)
+                ),
+                ReadConfig.lunchDuration,
+                false
+        );
+        dayEvents.add(lunchEvent);
+
+        // События после обеда
+
+        long beginAfterLungTime = dayEvents.get(dayEvents.size() - 1).getBeginTime().getTime() +
+                                  ReadConfig.lunchDuration * toMsMultiplier;
+        for (int untilEventCount = 0; untilEventCount < ReadConfig.afterLunchCycles; untilEventCount++) {
+
+            // Рабочее событие
+            Event workEvent = new Event(
+                    new Date(
+                        beginAfterLungTime + untilEventCount * (ReadConfig.workDuration + ReadConfig.timeoutDuration) * toMsMultiplier
+                    ),
+                    ReadConfig.workDuration,
+                    true
+            );
+            dayEvents.add(workEvent);
+
+            // Событие отдыха
+            Event timeoutEvent = new Event(
+                    new Date(
+                        beginAfterLungTime +
+                        ReadConfig.workDuration * (untilEventCount + 1) * toMsMultiplier +
+                        ReadConfig.timeoutDuration * untilEventCount * toMsMultiplier
+                    ),
+                    ReadConfig.timeoutDuration,
+                    false
+            );
+            dayEvents.add(timeoutEvent);
+        }
+
+        return dayEvents;
     }
 
     /**
